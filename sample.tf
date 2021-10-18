@@ -2,7 +2,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 2.70"
+      version = "~> 3.0"
     }
   }
 }
@@ -13,6 +13,11 @@ provider "aws" {
 }
 
 resource "aws_instance" "example" {
-  ami           = "ami-087c17d1fe0178315"
+  #change the ami for a current one
+  ami           = "ami-02e136e904f3da870"
   instance_type = "t2.micro"
+  key_name      = "vockey"
+  provisioner "local-exec" {
+    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i '${self.public_ip},' -u ec2-user --private-key ~/Downloads/labsuser.pem  playbook.yml"
+}
 }
